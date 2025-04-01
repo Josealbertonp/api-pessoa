@@ -38,19 +38,12 @@ dependencies {
 
     // Testes
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.mockito:mockito-core:5.10.0'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.10.0'
-    testImplementation 'org.mockito:mockito-inline:5.0.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    // Dependência para o JUnit Jupiter (JUnit 5)
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
-    systemProperty 'jdk.attach.allowAttachSelf', 'true' // Reduz warnings do ByteBuddy
+    systemProperty 'jdk.attach.allowAttachSelf', 'true'
     jvmArgs = [
             '--add-opens=java.base/java.lang=ALL-UNNAMED',
             '-XX:+EnableDynamicAgentLoading'
@@ -65,4 +58,3 @@ tasks.named('test') {
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += ['-Xlint:-deprecation']
 }
-
