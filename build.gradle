@@ -1,0 +1,68 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'io.freefair.lombok' version '8.6'
+}
+
+group = 'com.pessoa'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Banco de dados
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // Documentação API
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0'
+    implementation 'io.swagger.core.v3:swagger-annotations:2.2.20'
+    implementation 'io.swagger.core.v3:swagger-models:2.2.20'
+
+    // Testes
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito:mockito-core:5.10.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.10.0'
+    testImplementation 'org.mockito:mockito-inline:5.0.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Dependência para o JUnit Jupiter (JUnit 5)
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    systemProperty 'jdk.attach.allowAttachSelf', 'true' // Reduz warnings do ByteBuddy
+    jvmArgs = [
+            '--add-opens=java.base/java.lang=ALL-UNNAMED',
+            '-XX:+EnableDynamicAgentLoading'
+    ]
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        showStandardStreams = true
+    }
+}
+
+// Configuração para reduzir warnings de deprecated
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Xlint:-deprecation']
+}
+
