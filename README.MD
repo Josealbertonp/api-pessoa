@@ -18,11 +18,59 @@ Esta API foi construída com Spring Boot e permite gerenciar dados de pessoas. A
 
 Antes de executar o projeto, certifique-se de que você tem as seguintes ferramentas instaladas:
 
-- Java 17 ou superior
-- Gradle ou Maven
-- Banco de dados MySQL
+- **Docker** e **Docker Compose**
+- **Java 17** ou superior
+- **Gradle** ou **Maven**
 
-### Configuração do banco de dados MySQL
+### Usando Docker e Docker Compose
+
+Se você deseja rodar a aplicação e o banco de dados de forma simples com Docker, basta seguir os seguintes passos:
+
+1. **Clone este repositório para sua máquina local**:
+
+    ```bash
+    git clone https://github.com/Josealbertonp/api-pessoa.git
+    ```
+
+2. **Navegue até o diretório do projeto**:
+
+    ```bash
+    cd api-pessoa
+    ```
+
+3. **Construa e inicie os containers com o Docker Compose**:
+
+   Execute o comando abaixo para construir e iniciar a aplicação e o banco de dados MySQL:
+
+    ```bash
+    docker compose up --build
+    ```
+
+   Esse comando irá:
+
+   - Construir as imagens necessárias
+   - Rodar a aplicação Spring Boot
+   - Rodar o banco de dados MySQL
+
+   Os containers serão iniciados e você poderá acessar a aplicação em `http://localhost:8080` e o banco de dados MySQL em `localhost:3306`.
+
+4. **Verifique os logs**:
+
+   Após rodar o comando, você pode monitorar os logs dos containers com:
+
+    ```bash
+    docker compose logs -f
+    ```
+
+5. **Para parar os containers**, você pode usar:
+
+    ```bash
+    docker compose down
+    ```
+
+### Configuração manual do banco de dados (caso não use Docker)
+
+Se você não usar o Docker, siga os passos abaixo para configurar o banco de dados manualmente:
 
 1. **Crie o banco de dados** no MySQL:
 
