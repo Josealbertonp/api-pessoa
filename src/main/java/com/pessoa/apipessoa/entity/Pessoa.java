@@ -31,6 +31,6 @@ public class Pessoa {
     @Column(name = "email", length = 30)
     private String email;
 
-    public Pessoa(long l, String fulano, String number, LocalDate of, String mail) {
+    public Pessoa(long id, String nome, String cpf, LocalDate dataNascimento, String email) {
     }
 }
