@@ -26,7 +26,7 @@ dependencies {
 
     // Banco de dados
     runtimeOnly 'com.mysql:mysql-connector-j'
-    implementation 'mysql:mysql-connector-java'
+    implementation 'mysql:mysql-connector-java:8.0.29'
 
     // Lombok
     compileOnly 'org.projectlombok:lombok'
