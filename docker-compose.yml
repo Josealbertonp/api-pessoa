@@ -5,32 +5,10 @@ services:
     image: mysql:8.0
     container_name: mysql_container
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: pessoa
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
       - "3306:3306"
     volumes:
       - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
-    networks:
-      - my_network
     restart: always
-
-  app:
-    image: api-pessoa
-    build: .
-    depends_on:
-      - db
-    command: java -jar /path/to/your-app.jar --server.port=8080
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/pessoa
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-    ports:
-      - "8080:8080"
-    networks:
-      - my_network
-    restart: always
-
-networks:
-  my_network:
-    driver: bridge
