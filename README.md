@@ -50,7 +50,12 @@ Se você deseja rodar a aplicação e o banco de dados de forma simples com Dock
     cd api-pessoa
     ```
 
-3. **Construa e inicie os containers com o Docker Compose**:
+3. **Configure o arquivo `.env`**
+
+   Copie o arquivo `.env_example` e renomeie para `.env`. Depois, edite as variáveis de ambiente com os valores adequados para o seu projeto:
+
+
+4. **Construa e inicie os containers com o Docker Compose**:
 
    Execute o comando abaixo para construir e iniciar a aplicação e o banco de dados MySQL:
 
@@ -66,7 +71,8 @@ Se você deseja rodar a aplicação e o banco de dados de forma simples com Dock
 
    Os containers serão iniciados e você poderá acessar a aplicação em `http://localhost:8080` e o banco de dados MySQL em `localhost:3306`.
 
-4. **Verifique os logs**:
+
+5. **Verifique os logs**:
 
    Após rodar o comando, você pode monitorar os logs dos containers com:
 
