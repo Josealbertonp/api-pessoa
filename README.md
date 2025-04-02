@@ -31,8 +31,8 @@ Esta API foi construída com Spring Boot e permite gerenciar dados de pessoas. A
 Antes de executar o projeto, certifique-se de que você tem as seguintes ferramentas instaladas:
 
 - **Docker** e **Docker Compose**
-- **Java 17** ou superior
-- **Gradle** ou **Maven**
+- **Java 17**
+- **Gradle**
 
 ### Usando Docker e Docker Compose
 
@@ -61,10 +61,9 @@ Se você deseja rodar a aplicação e o banco de dados de forma simples com Dock
    Esse comando irá:
 
    - Construir as imagens necessárias
-   - Rodar a aplicação Spring Boot
    - Rodar o banco de dados MySQL
 
-   Os containers serão iniciados e você poderá acessar a aplicação em `http://localhost:8080` e o banco de dados MySQL em `localhost:3306`.
+   O container sera iniciado e você poderá acessar o banco de dados MySQL em `localhost:3306`.
 
 4. **Verifique os logs**:
 
@@ -88,6 +87,15 @@ Se você não usar o Docker, siga os passos abaixo para configurar o banco de da
 
     ```sql
     CREATE DATABASE api_pessoa;
+
+    CREATE TABLE IF NOT EXISTS pessoa (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(50),
+    cpf VARCHAR(11),
+    dataNascimento DATE,
+    email VARCHAR(50),
+    PRIMARY KEY (id)
+    );
     ```
 
 2. **Configuração da conexão no `application.properties`**:
@@ -97,7 +105,7 @@ Se você não usar o Docker, siga os passos abaixo para configurar o banco de da
     ```properties
     spring.datasource.url=jdbc:mysql://localhost:3306/api_pessoa
     spring.datasource.username=root
-    spring.datasource.password=senha
+    spring.datasource.password=root
     ```
 
    *Altere a senha conforme necessário.*
