@@ -46,7 +46,7 @@ class PessoaControllerTest {
         Pessoa pessoa = criarPessoaValida();
         when(pessoaService.cadastrar(pessoa)).thenReturn(ResponseEntity.status(HttpStatus.CREATED).body(pessoa));
 
-        ResponseEntity<Pessoa> resposta = pessoaController.cadastrar(pessoa);
+            ResponseEntity<String> resposta = (ResponseEntity<String>) pessoaController.cadastrar(pessoa);
 
         assertEquals(HttpStatus.CREATED, resposta.getStatusCode());
         assertEquals(pessoa, resposta.getBody());

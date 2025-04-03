@@ -11,6 +11,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -65,7 +68,12 @@ class PessoaServiceTest {
 
     @Test
     void cadastrar_DeveRetornarPessoaCriadaComStatus201() {
+        Pessoa pessoa = new Pessoa("nome", "cpf", "email");
         when(pessoaRepository.save(any(Pessoa.class))).thenReturn(pessoa);
+
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setRequestURI("/pessoas");
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
 
         ResponseEntity<Pessoa> resposta = pessoaService.cadastrar(pessoa);
 
