@@ -1,6 +1,10 @@
 package com.pessoa.apipessoa.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,21 +20,26 @@ public class Pessoa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nome", length = 50)
+    @NotEmpty(message = "Nome não pode ser vazio")
+    @Size(min = 2, max = 50, message = "Nome deve ter entre 2 e 50 caracteres")
     private String nome;
 
-    @Column(name = "cpf", length = 11)
+    @NotEmpty(message = "CPF não pode ser vazio")
+    @Size(min = 11, max = 11, message = "CPF deve ter 11 caracteres")
     private String cpf;
 
-    @Column(name = "dataNascimento")
+    @NotNull(message = "Data de nascimento é obrigatória")
     private LocalDate dataNascimento;
 
-    @Column(name = "email", length = 30)
+    @Email(message = "Email deve ser válido")
+    @NotEmpty(message = "Email não pode ser vazio")
     private String email;
 
     public Pessoa(long id, String nome, String cpf, LocalDate dataNascimento, String email) {
+    }
+
+    public Pessoa(String nome, String cpf, String email) {
     }
 }

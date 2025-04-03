@@ -1,13 +1,16 @@
 package com.pessoa.apipessoa.controller;
 
 import com.pessoa.apipessoa.entity.Pessoa;
+import com.pessoa.apipessoa.exception.CpfJaCadastradoException;
 import com.pessoa.apipessoa.service.PessoaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +30,10 @@ public class PessoaController {
 
     @GetMapping
     @Operation(summary = "Listar todas as pessoas", description = "Retorna uma lista completa de todas as pessoas cadastradas")
-    @ApiResponse(responseCode = "200", description = "Lista de pessoas retornada com sucesso")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Lista de pessoas retornada com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor")
+    })
     public ResponseEntity<List<Pessoa>> listarPessoas() {
         return pessoaService.listarPessoas();
     }
@@ -36,17 +42,25 @@ public class PessoaController {
     @Operation(summary = "Cadastrar nova pessoa", description = "Cria um novo registro de pessoa no sistema")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Pessoa cadastrada com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor")
     })
-    public ResponseEntity<Pessoa> cadastrar(@RequestBody Pessoa pessoa) {
-        return pessoaService.cadastrar(pessoa);
+    public Object cadastrar(@RequestBody Pessoa pessoa) {
+        try {
+            Pessoa pessoaSalva = pessoaService.cadastrar(pessoa).getBody();
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
+        } catch (CpfJaCadastradoException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/deletar/{id}")
     @Operation(summary = "Excluir pessoa", description = "Remove uma pessoa do sistema pelo ID")
     @ApiResponses({
             @ApiResponse(responseCode = "204", description = "Pessoa excluída com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Pessoa não encontrada")
+            @ApiResponse(responseCode = "404", description = "Pessoa não encontrada"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor")
     })
     public ResponseEntity<Object> deletarPessoa(
             @Parameter(description = "ID da pessoa a ser excluída", example = "1")
@@ -59,12 +73,13 @@ public class PessoaController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Pessoa atualizada com sucesso"),
             @ApiResponse(responseCode = "404", description = "Pessoa não encontrada"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+            @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor")
     })
     public ResponseEntity<Pessoa> alterarPessoa(
             @Parameter(description = "ID da pessoa a ser atualizada", example = "1")
             @PathVariable Long id,
-            @RequestBody Pessoa pessoa) {
+            @RequestBody @Valid Pessoa pessoa) {
         return pessoaService.alterarPessoa(id, pessoa);
     }
 
@@ -72,7 +87,8 @@ public class PessoaController {
     @Operation(summary = "Buscar pessoa por ID", description = "Retorna os dados de uma pessoa específica")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Pessoa encontrada"),
-            @ApiResponse(responseCode = "404", description = "Pessoa não encontrada")
+            @ApiResponse(responseCode = "404", description = "Pessoa não encontrada"),
+            @ApiResponse(responseCode = "500", description = "Erro no servidor")
     })
     public ResponseEntity<Pessoa> buscarPessoaPorId(
             @Parameter(description = "ID da pessoa a ser localizada", example = "1")
